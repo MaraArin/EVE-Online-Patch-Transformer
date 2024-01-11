@@ -1,113 +1,301 @@
-import Image from 'next/image'
+"use client"
 
-export default function Home() {
-  return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <div className="z-10 max-w-5xl w-full items-center justify-between font-mono text-sm lg:flex">
-        <p className="fixed left-0 top-0 flex w-full justify-center border-b border-gray-300 bg-gradient-to-b from-zinc-200 pb-6 pt-8 backdrop-blur-2xl dark:border-neutral-800 dark:bg-zinc-800/30 dark:from-inherit lg:static lg:w-auto  lg:rounded-xl lg:border lg:bg-gray-200 lg:p-4 lg:dark:bg-zinc-800/30">
-          Get started by editing&nbsp;
-          <code className="font-mono font-bold">app/page.tsx</code>
-        </p>
-        <div className="fixed bottom-0 left-0 flex h-48 w-full items-end justify-center bg-gradient-to-t from-white via-white dark:from-black dark:via-black lg:static lg:h-auto lg:w-auto lg:bg-none">
-          <a
-            className="pointer-events-none flex place-items-center gap-2 p-8 lg:pointer-events-auto lg:p-0"
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{' '}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className="dark:invert"
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
-        </div>
-      </div>
+import React, { useState, ChangeEvent } from 'react';
 
-      <div className="relative flex place-items-center before:absolute before:h-[300px] before:w-[480px] before:-translate-x-1/2 before:rounded-full before:bg-gradient-radial before:from-white before:to-transparent before:blur-2xl before:content-[''] after:absolute after:-z-20 after:h-[180px] after:w-[240px] after:translate-x-1/3 after:bg-gradient-conic after:from-sky-200 after:via-blue-200 after:blur-2xl after:content-[''] before:dark:bg-gradient-to-br before:dark:from-transparent before:dark:to-blue-700 before:dark:opacity-10 after:dark:from-sky-900 after:dark:via-[#0141ff] after:dark:opacity-40 before:lg:h-[360px] z-[-1]">
-        <Image
-          className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff70] dark:invert"
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
+interface CleanHTMLComponentProps {}
 
-      <div className="mb-32 grid text-center lg:max-w-5xl lg:w-full lg:mb-0 lg:grid-cols-4 lg:text-left">
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Docs{' '}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Find in-depth information about Next.js features and API.
-          </p>
-        </a>
+/* ToDo:
+nested lists,
+a's hrefs aka links,
+use a library?, // will it work client side?
+instructions/docs,
+styling
+*/
+const CleanHTMLComponent: React.FC<CleanHTMLComponentProps> = () => {
+  const [inputHTML, setInputHTML] = useState<string>('');
+  const [titles, setTitles] = useState<string[]>([]);
 
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Learn{' '}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Learn about Next.js in an interactive course with&nbsp;quizzes!
-          </p>
-        </a>
+  const handleInputChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
+    setInputHTML(event.target.value);
+  };
 
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Templates{' '}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Explore the Next.js 13 playground.
-          </p>
-        </a>
+  const cleanHTML = () => {
+    // Use a regex to remove HTML attributes
+    let modifiedHTML = inputHTML.replace(/(\S+)="[^"]*"/g, '');
 
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Deploy{' '}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
-    </main>
-  )
+    // Remove extra whitespaces
+    modifiedHTML = modifiedHTML.replace(/\s+/g, ' ');
+
+    // Remove extra whitespaces within HTML tags
+    modifiedHTML = modifiedHTML.replace(/>\s+</g, '><');
+    modifiedHTML = modifiedHTML.replace(/\s>/g, '>');
+    modifiedHTML = modifiedHTML.replace(/>\s/g, '>');
+    modifiedHTML = modifiedHTML.replace(/\s</g, '<');
+    modifiedHTML = modifiedHTML.replace(/<\s/g, '<');
+    modifiedHTML = modifiedHTML.replace(/\s\//g, '/');
+
+    // Split the modified HTML by <hr/> tags
+    const sections = modifiedHTML.split('<hr/>');
+
+    // Process each section separately
+    const sectionTitleBulletMaps = sections.map(section => {
+      
+      section = removeDefectFixes(section)
+
+      // Replace HTML with MediaWiki syntax
+      section = section.replace(/<p><b>Features &amp; Changes:<\/b><\/p>/g, '\n=== Features & Changes ===\n\n');
+
+      section = section.replace(/<h2>/g, '== ');
+      section = section.replace(/<\/h2>/g, ' ==\n\n');
+
+      section = section.replace(/<h3><b>/g, '=== ');
+      section = section.replace(/<\/b><\/h3>/g, ' ===\n\n');
+
+      section = section.replace(/<p><b>/g, '==== ');
+      section = section.replace(/<\/b><\/p>/g, ' ====\n\n');
+
+      section = section.replace(/<li><p>/g, '* ');
+      section = section.replace(/<\/p><\/li>/g, '\n');
+
+      section = section.replace(/<\/p>/g, '\n');
+
+      
+
+      // Remove ":"
+      section = section.replace(/:/g, '');
+      // Remove "amp;"
+      section = section.replace(/amp;/g, '');
+      
+
+      // Remove the remaining HTML tags
+      section = section.replace(/<\/?[^>]+(>|$)/g, "")
+
+      console.log(section)
+      // Add extra newline between bulletpoint and header
+      section = section.replace(/\.\n==/g, '.\n\n==');
+      section = section.replace(/.\n====/g, '.\n\n====');
+
+      // Return the title and bullet points for the section
+      return section;
+    });
+
+    //console.log(sectionTitleBulletMaps[1])
+
+    // Update the titleBulletMaps state
+    setTitles(sectionTitleBulletMaps);
+  };
+
+  function removeDefectFixes(input: string): string {
+    const startIndexH3 = input.indexOf("<h3><b>Defect Fixes:</b></h3>");
+    const startIndexP = input.indexOf("<p><b>Defect Fixes:</b></p>");
+
+    let startIndex: number;
+
+    // Determine the starting index based on which pattern is found first
+    if (startIndexH3 !== -1 && (startIndexP === -1 || startIndexH3 < startIndexP)) {
+        startIndex = startIndexH3;
+    } else if (startIndexP !== -1) {
+        startIndex = startIndexP;
+    } else {
+        // Starting point not found, return the original string
+        return input;
+    }
+
+    // Found the starting point, remove everything from that point onwards
+    return input.substring(0, startIndex);
 }
+
+return (
+  <div>
+    <label>
+      Input HTML:
+      <textarea value={inputHTML} onChange={handleInputChange} />
+    </label>
+    <br />
+    <button onClick={cleanHTML}>Clean HTML</button>
+    <br />
+    <label>
+      Extracted Titles:
+    </label>
+    <div>
+      {titles.map((title, index) => (
+        <pre key={index}>{title}</pre>
+      ))}
+    </div>
+  </div>
+);
+};
+
+export default CleanHTMLComponent;
+
+/*
+import React, { useState, ChangeEvent } from 'react';
+
+interface CleanHTMLComponentProps {}
+
+const CleanHTMLComponent: React.FC<CleanHTMLComponentProps> = () => {
+  const [inputHTML, setInputHTML] = useState<string>('');
+  const [titleBulletMaps, setTitleBulletMaps] = useState<{ [title: string]: string[] }[]>([]);
+
+  const handleInputChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
+    setInputHTML(event.target.value);
+  };
+
+  const cleanHTML = () => {
+    // Use a regex to remove HTML attributes
+    let modifiedHTML = inputHTML.replace(/(\S+)="[^"]*"/g, '');
+
+    // Remove extra whitespaces
+    modifiedHTML = modifiedHTML.replace(/\s+/g, ' ');
+
+    // Remove extra whitespaces within HTML tags
+    modifiedHTML = modifiedHTML.replace(/>\s+</g, '><');
+
+    // Remove extra whitespaces around brackets
+    modifiedHTML = modifiedHTML.replace(/\s>/g, '>');
+    modifiedHTML = modifiedHTML.replace(/>\s/g, '>');
+    modifiedHTML = modifiedHTML.replace(/\s</g, '<');
+    modifiedHTML = modifiedHTML.replace(/<\s/g, '<');
+    modifiedHTML = modifiedHTML.replace(/\s\//g, '/');
+
+    // Split the modified HTML by <hr/> tags
+    const sections = modifiedHTML.split('<hr/>');
+
+    // Process each section separately
+    const sectionTitleBulletMaps = sections.map(section => {
+      
+      section = removeDefectFixes(section)
+
+      // Extract titles between the first <h2> tags
+      const titleMatches = section.match(/<h2>(.*?)<\/h2>/);
+      const title = titleMatches ? titleMatches[1] : '';
+
+      // Extract bullet points between <li><p> tags
+      const bulletPointMatches = section.match(/<li><p>(.*?)<\/p><\/li>/g);
+      const bulletPoints = bulletPointMatches ? bulletPointMatches.map(match => match.replace(/<li><p>(.*?)<\/p><\/li>/, '$1')) : [];
+
+      // Return the title and bullet points for the section
+      return { [title]: bulletPoints };
+    });
+
+    console.log(sectionTitleBulletMaps[0])
+
+    // Update the titleBulletMaps state
+    setTitleBulletMaps(sectionTitleBulletMaps);
+  };
+
+  function removeDefectFixes(input: string): string {
+    const startIndex = input.indexOf("<h3><b>Defect Fixes:</b></h3>");
+
+    if (startIndex !== -1) {
+        // Found the starting point, remove everything from that point onwards
+        return input.substring(0, startIndex);
+    } else {
+        // Starting point not found, return the original string
+        return input;
+    }
+}
+
+  return (
+    <div>
+      <label>
+        Input HTML:
+        <textarea value={inputHTML} onChange={handleInputChange} />
+      </label>
+      <br />
+      <button onClick={cleanHTML}>Clean HTML</button>
+      <br />
+      <label>
+        Extracted Titles and Bullet Points:
+      </label>
+      <div>
+        {titleBulletMaps.map((titleBulletMap, index) => (
+          <div key={index}>
+            {Object.entries(titleBulletMap).map(([title, bulletPoints], titleIndex) => (
+              <div key={titleIndex}>
+                <h2>{title}</h2>
+                <ul>
+                  {bulletPoints.map((bullet, bulletIndex) => (
+                    <li key={bulletIndex}>{bullet}</li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};
+
+export default CleanHTMLComponent;
+*/
+/*
+import React, { useState, ChangeEvent } from 'react';
+
+interface CleanHTMLComponentProps {}
+
+const CleanHTMLComponent: React.FC<CleanHTMLComponentProps> = () => {
+  const [inputHTML, setInputHTML] = useState<string>('');
+  const [titles, setTitles] = useState<string[]>([]);
+
+  const handleInputChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
+    setInputHTML(event.target.value);
+  };
+
+  const cleanHTML = () => {
+    // Use a regex to remove HTML attributes
+    let modifiedHTML = inputHTML.replace(/(\S+)="[^"]*"/g, '');
+
+    // Remove extra whitespaces
+    modifiedHTML = modifiedHTML.replace(/\s+/g, ' ');
+
+    // Remove extra whitespaces within HTML tags
+    modifiedHTML = modifiedHTML.replace(/>\s+</g, '><');
+
+    // Remove extra whitespaces around brackets
+    modifiedHTML = modifiedHTML.replace(/\s>/g, '>');
+    modifiedHTML = modifiedHTML.replace(/>\s/g, '>');
+    modifiedHTML = modifiedHTML.replace(/\s</g, '<');
+    modifiedHTML = modifiedHTML.replace(/<\s/g, '<');
+    modifiedHTML = modifiedHTML.replace(/\s\//g, '/');
+
+    // Split the modified HTML into an array of strings
+    const lines = modifiedHTML.split('<hr/>');
+    console.log(lines[1])
+
+    // Extract titles between the first <h2> tags
+    const titles: string[] = []
+    for (let element of lines) {
+      const titleMatches = element.match(/<h2>(.*?)<\/h2>/);
+      const title = titleMatches ? titleMatches[1] : '';
+      titles.push(title);
+    }
+    // Set the title to the state
+    setTitles(titles);
+
+  };
+
+  return (
+    <div>
+      <label>
+        Input HTML:
+        <textarea value={inputHTML} onChange={handleInputChange} />
+      </label>
+      <br />
+      <button onClick={cleanHTML}>Clean HTML</button>
+      <br />
+      <label>
+        Extracted Titles:
+      </label>
+      <div>
+        {titles.map((title, index) => (
+          <div key={index}>{title}</div>
+        ))}
+      </div>
+    </div>
+  );
+};
+
+export default CleanHTMLComponent;
+*/
