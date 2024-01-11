@@ -34,8 +34,11 @@ const CleanHTMLComponent: React.FC<CleanHTMLComponentProps> = () => {
     modifiedHTML = modifiedHTML.replace(/<\s/g, '<');
     modifiedHTML = modifiedHTML.replace(/\s\//g, '/');
 
-    // Split the modified HTML by <hr/> tags
-    const sections = modifiedHTML.split('<hr/>');
+    // Split the modified HTML by <hr> tags
+    let sections = modifiedHTML.split('<hr/>');
+    if (sections.length == 1) {
+      sections = modifiedHTML.split('<hr>');
+    }
 
     // Process each section separately
     const sectionTitleBulletMaps = sections.map(section => {
@@ -59,21 +62,19 @@ const CleanHTMLComponent: React.FC<CleanHTMLComponentProps> = () => {
 
       section = section.replace(/<\/p>/g, '\n');
 
-      
-
       // Remove ":"
-      section = section.replace(/:/g, '');
+      //section = section.replace(/:/g, '');
+      section = section.replace(/: =/g, ' =');
       // Remove "amp;"
       section = section.replace(/amp;/g, '');
       
-
       // Remove the remaining HTML tags
       section = section.replace(/<\/?[^>]+(>|$)/g, "")
 
       console.log(section)
       // Add extra newline between bulletpoint and header
       section = section.replace(/\.\n==/g, '.\n\n==');
-      section = section.replace(/.\n====/g, '.\n\n====');
+      section = section.replace(/\.\n====/g, '.\n\n====');
 
       // Return the title and bullet points for the section
       return section;
