@@ -2,51 +2,56 @@
 
 import React, { useState, ChangeEvent } from "react";
 
-interface CleanHTMLComponentProps {}
+interface TransformPatchNotesProps {}
 
 /* ToDo:
 parse nested lists,
 parse a's hrefs aka links,
 use a library? // will it work client side?
 */
-const CleanHTMLComponent: React.FC<CleanHTMLComponentProps> = () => {
-  const [inputHTML, setInputHTML] = useState<string>("");
-  const [titles, setTitles] = useState<string[]>([]);
+
+const TransformPatchNotes: React.FC<TransformPatchNotesProps> = () => {
+  const [inputPatchNoteHTML, setInputPatchNoteHTML] = useState<string>("");
+  const [patchNoteSections, setPatchNoteSections] = useState<string[]>([]);
 
   const handleInputChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
-    setInputHTML(event.target.value);
+    setInputPatchNoteHTML(event.target.value);
   };
 
-  const cleanHTML = () => {
-    // Use a regex to remove HTML attributes
-    let modifiedHTML = inputHTML.replace(/(\S+)="[^"]*"/g, "");
+  const transformHTMLToMediaWiki = () => {
+    // Remove HTML attributes
+    let blogPostPatchNotes = inputPatchNoteHTML.replace(/(\S+)="[^"]*"/g, "");
 
     // Remove extra whitespaces
-    modifiedHTML = modifiedHTML.replace(/\s+/g, " ");
+    blogPostPatchNotes = blogPostPatchNotes.replace(/\s+/g, " ");
+    blogPostPatchNotes = blogPostPatchNotes.replace(/>\s+</g, "><");
+    blogPostPatchNotes = blogPostPatchNotes.replace(/\s>/g, ">");
+    blogPostPatchNotes = blogPostPatchNotes.replace(/>\s/g, ">");
+    blogPostPatchNotes = blogPostPatchNotes.replace(/\s</g, "<");
+    blogPostPatchNotes = blogPostPatchNotes.replace(/<\s/g, "<");
+    blogPostPatchNotes = blogPostPatchNotes.replace(/\s\//g, "/");
 
-    // Remove extra whitespaces within HTML tags
-    modifiedHTML = modifiedHTML.replace(/>\s+</g, "><");
-    modifiedHTML = modifiedHTML.replace(/\s>/g, ">");
-    modifiedHTML = modifiedHTML.replace(/>\s/g, ">");
-    modifiedHTML = modifiedHTML.replace(/\s</g, "<");
-    modifiedHTML = modifiedHTML.replace(/<\s/g, "<");
-    modifiedHTML = modifiedHTML.replace(/\s\//g, "/");
-
-    // Split the modified HTML by <hr> tags
-    let sections = modifiedHTML.split("<hr/>");
-    if (sections.length == 1) {
-      sections = modifiedHTML.split("<hr>");
+    // Split the HTML by <hr> or <hr/> tag
+    let patchNoteSections = blogPostPatchNotes.split("<hr/>");
+    if (patchNoteSections.length == 1) {
+      patchNoteSections = blogPostPatchNotes.split("<hr>");
     }
 
+    const sectionsWithoutDefectFixes = patchNoteSections.map((section) => {
+      return removeDefectFixes(section);
+    }
+    );
+
     // Process each section separately
-    const sectionTitleBulletMaps = sections.map((section) => {
-      section = removeDefectFixes(section);
+    const mediaWikiSections = sectionsWithoutDefectFixes.map((section) => {
 
       // Replace HTML with MediaWiki syntax
       section = section.replace(
         /<p><b>Features &amp; Changes:<\/b><\/p>/g,
         "\n=== Features & Changes ===\n\n"
       );
+
+      section = section.replace(/<br>/g,"\n");
 
       section = section.replace(/<h2>/g, "== ");
       section = section.replace(/<\/h2>/g, " ==\n\n");
@@ -63,7 +68,6 @@ const CleanHTMLComponent: React.FC<CleanHTMLComponentProps> = () => {
       section = section.replace(/<\/p>/g, "\n");
 
       // Remove ":"
-      //section = section.replace(/:/g, '');
       section = section.replace(/: =/g, " =");
       // Remove "amp;"
       section = section.replace(/amp;/g, "");
@@ -71,19 +75,23 @@ const CleanHTMLComponent: React.FC<CleanHTMLComponentProps> = () => {
       // Remove the remaining HTML tags
       section = section.replace(/<\/?[^>]+(>|$)/g, "");
 
-      console.log(section);
-      // Add extra newline between bulletpoint and header
+      // Add extra newline between bulletpoints and headers
       section = section.replace(/\.\n==/g, ".\n\n==");
       section = section.replace(/\.\n====/g, ".\n\n====");
 
-      // Return the title and bullet points for the section
+      section = section.replace(/\?\n==/g, "?\n\n==");
+      section = section.replace(/\?\n====/g, "?\n\n====");
+
+      section = section.replace(/\!\n==/g, "!\n\n==");
+      section = section.replace(/\!\n====/g, "!\n\n====");
+      
+      // Add extra newline between bulletpoints and headers
+      section = section.replace(/:\n\w/g, ":\n\n\w");
+
       return section;
     });
 
-    //console.log(sectionTitleBulletMaps[1])
-
-    // Update the titleBulletMaps state
-    setTitles(sectionTitleBulletMaps);
+    setPatchNoteSections(mediaWikiSections);
   };
 
   function removeDefectFixes(input: string): string {
@@ -110,7 +118,7 @@ const CleanHTMLComponent: React.FC<CleanHTMLComponentProps> = () => {
   }
 
   const copyToClipboard = () => {
-    const outputText = titles.join("\n\n");
+    const outputText = patchNoteSections.join("\n\n");
 
     // Create a temporary textarea to copy the text to clipboard
     const tempTextarea = document.createElement("textarea");
@@ -177,21 +185,21 @@ const CleanHTMLComponent: React.FC<CleanHTMLComponentProps> = () => {
         </li>
       </ol>
       <div className="container">
-        <button onClick={cleanHTML}>Convert to MediaWiki</button>
+        <button onClick={transformHTMLToMediaWiki}>Convert to MediaWiki</button>
         <button onClick={copyToClipboard}>Copy to Clipboard</button>
       </div>
       <div className="container">
         <div className="input-container">
           <label>Input HTML:</label>
-          <textarea value={inputHTML} onChange={handleInputChange} />
+          <textarea value={inputPatchNoteHTML} onChange={handleInputChange} />
         </div>
         <div className="output-container">
           <label>Output MediaWiki:</label>
-          <pre>{titles.join("")}</pre>
+          <pre>{patchNoteSections.join("")}</pre>
         </div>
       </div>
     </div>
   );
 };
 
-export default CleanHTMLComponent;
+export default TransformPatchNotes;
