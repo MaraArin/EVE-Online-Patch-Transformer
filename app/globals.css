@@ -2,27 +2,52 @@
 @tailwind components;
 @tailwind utilities;
 
-/* :root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
-  }
-}
-
 body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  margin: 20px;
 }
- */
+
+ol {
+  margin: 20px;
+}
+
+.container {
+  display: flex;
+  justify-content: space-between;
+}
+
+.input-container,
+.output-container {
+  width: 45%; /* Adjust the width based on your preference */
+}
+
+textarea {
+  width: calc(100% - 20px); /* Adjust the width based on padding */
+  height: 100%;
+  padding: 8px;
+  margin-bottom: 10px;
+  box-sizing: border-box;
+  border: 1px solid #ddd; /* Add border around textarea */
+  resize: none; /* Disable textarea resizing */
+}
+
+button {
+  background-color: #4caf50;
+  color: white;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+button:hover {
+  background-color: #45a049;
+}
+
+pre {
+  white-space: pre-wrap;
+  overflow-y: auto; /* Allow vertical scrolling for pre element */
+  max-height: 300px; /* Set maximum height for pre element */
+  border: 1px solid #ddd; /* Add border around textarea */
+}
