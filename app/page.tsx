@@ -133,7 +133,8 @@ const CleanHTMLComponent: React.FC<CleanHTMLComponentProps> = () => {
         <li>
           Go to{" "}
           <a
-            className="font-medium text-blue-600 underline dark:text-blue-500 hover:no-underline" target="_blank"
+            className="font-medium text-blue-600 underline dark:text-blue-500 hover:no-underline"
+            target="_blank"
             href="https://www.eveonline.com/news/t/patch-notes"
           >
             EVE Online Patch Notes
@@ -143,7 +144,8 @@ const CleanHTMLComponent: React.FC<CleanHTMLComponentProps> = () => {
         <li>
           Open a Patch Notes blog post such as{" "}
           <a
-            className="font-medium text-blue-600 underline dark:text-blue-500 hover:no-underline" target="_blank"
+            className="font-medium text-blue-600 underline dark:text-blue-500 hover:no-underline"
+            target="_blank"
             href="https://www.eveonline.com/news/view/havoc-expansion-notes"
           >
             Havoc: Expansion Notes
@@ -152,24 +154,27 @@ const CleanHTMLComponent: React.FC<CleanHTMLComponentProps> = () => {
         </li>
         <li>
           Right-click anywhere on the webpage to open up a dropdown menu and
-          click on "Inspect". A developer console should open up. The
-          "Inspector" tab should be selected, showing HTML elements.
+          click on <strong>Inspect</strong>. A developer console should open up. The{" "}
+          <strong>Inspector</strong> tab should be selected, showing HTML elements.
         </li>
         <li>
-          Find the HTML element with the "class=RichText_richtext". You can use
-          the "Search HTML" tool to find it more easily. This HTML element
-          contains the contents of the Patch Notes blog post.
+          Find the HTML element with the <strong>class=RichText_richtext</strong>.
+          You can use the <strong>Search HTML</strong> tool to find it more easily.
+          This HTML element contains the contents of the Patch Notes blog post.
         </li>
         <li>
-          Right-click the HTML element to open up a dropdown menu, hover over
-          "Copy" than click on "Inner HTML". This will copy the HTML contents of
-          the Patch Notes blog post into your clipboard.
+          Right-click the HTML element to open up a dropdown menu, hover over{" "}
+          <strong>Copy</strong> than click on <strong>Inner HTML</strong>. This will
+          copy the HTML contents of the Patch Notes blog post into your
+          clipboard.
         </li>
         <li>
           Paste the contents of the Patch Notes blog post into the text field
           below.
         </li>
-        <li>Press the "Convert" button.</li>
+        <li>
+          Press the <strong>Convert</strong> button.
+        </li>
       </ol>
       <div className="container">
         <button onClick={cleanHTML}>Convert to MediaWiki</button>
