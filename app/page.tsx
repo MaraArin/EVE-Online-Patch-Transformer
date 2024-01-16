@@ -93,6 +93,11 @@ function convertToMediaWiki(sectionsWithoutDefectFixes: string[]) {
 
     section = section.replace(/<p><b>(.*?)<\/b><\/p>/g, '==== $1 ====\n\n');
     
+    //console.log(section)
+
+    //section = section.replace(/<p>(.*?):<\/p><(.*?)>/g, '==== $1: ====\n\n');
+    //<p>Universe:</p>
+
     // Bold text
     //section = section.replace(/<b>/g, "'''");
     //section = section.replace(/<\/b>/g, "'''");
@@ -116,7 +121,7 @@ function convertToMediaWiki(sectionsWithoutDefectFixes: string[]) {
     // Remove "&nbsp;", the non-breaking newline
     section = section.replace(/&nbsp;/g, "");
 
-    console.log(section)
+    //console.log(section)
 
     // Edge case formatting
     section = section.replace(/:<\/p><ul><li><p>/g, ":\n* ");
@@ -128,6 +133,9 @@ function convertToMediaWiki(sectionsWithoutDefectFixes: string[]) {
     section = section.replace(/([\w\.\,\!\?])=/g, "$1\n\n=");
     section = section.replace(/([\w\.\,\!\?])\n=/g, "$1\n\n=");
     section = section.replace(/([\w\.\,\!\?])\*/g, "$1\n\n*");
+
+    section = section.replace(/:\*/g, ":\n*");
+    section = section.replace(/:(\w)/g, ":\n\n$1");
 
     return section;
   });
