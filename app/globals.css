@@ -5,6 +5,8 @@
 body {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   margin: 20px;
+  color: rgb(255, 255, 255);
+  background-color: rgb(18, 18, 18);
 }
 
 ol {
@@ -29,16 +31,19 @@ textarea {
   box-sizing: border-box;
   border: 1px solid #ddd; /* Add border around textarea */
   resize: none; /* Disable textarea resizing */
+  color: rgb(255, 255, 255);
+  background-color: rgb(18, 18, 18);
 }
 
 button {
-  background-color: #4caf50;
+  /*background-color: #4caf50;*/
   color: white;
   padding: 10px 15px;
   border: none;
   border-radius: 4px;
   cursor: pointer;
   transition: background-color 0.3s;
+  background-image: linear-gradient(rgba(255, 255, 255, 0.09), rgba(255, 255, 255, 0.09));
 }
 
 button:hover {
@@ -50,4 +55,6 @@ pre {
   overflow-y: auto; /* Allow vertical scrolling for pre element */
   max-height: 300px; /* Set maximum height for pre element */
   border: 1px solid #ddd; /* Add border around textarea */
+  color: rgb(255, 255, 255);
+  background-color: rgb(18, 18, 18);
 }

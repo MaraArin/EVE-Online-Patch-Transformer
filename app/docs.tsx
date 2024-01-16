@@ -27,9 +27,9 @@ const Docs: React.FC<DocsProps> = () => {
           <a
             className="font-medium text-blue-600 underline dark:text-blue-500 hover:no-underline"
             target="_blank"
-            href="https://www.eveonline.com/news/view/havoc-expansion-notes"
+            href="https://www.eveonline.com/news/view/patch-notes-version-21-06"
           >
-            Havoc: Expansion Notes
+            Patch Notes - Version 21.06
           </a>
           .
         </li>
@@ -39,18 +39,18 @@ const Docs: React.FC<DocsProps> = () => {
           <strong>Inspector</strong> tab should be selected, showing HTML elements.
         </li>
         <li>
-          Find the HTML element with the <strong>class=RichText_richtext</strong>.
-          You can use the <strong>Search HTML</strong> tool to find it more easily.
+          Find the HTML element with the attribute name <strong>class</strong> equal to value <strong>RichText_richtext</strong>.
+          You can use the <strong>Search HTML</strong> tool (<strong>CTRL+F</strong> in <strong>Inspector</strong>) to find the <strong>RichText_richtext</strong> value more easily.
           This HTML element contains the contents of the Patch Notes blog post.
         </li>
         <li>
           Right-click the HTML element to open up a dropdown menu, hover over{" "}
-          <strong>Copy</strong> than click on <strong>Inner HTML</strong>. This will
+          <strong>Copy</strong> then click on <strong>Inner HTML</strong>. This will
           copy the HTML contents of the Patch Notes blog post into your
           clipboard.
         </li>
         <li>
-          Paste the contents of the Patch Notes blog post into the text field
+          Paste the contents of the Patch Notes blog post into the <strong>Patch Notes HTML</strong> text field
           below.
         </li>
         <li>

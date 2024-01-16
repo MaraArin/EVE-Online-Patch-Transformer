@@ -64,7 +64,7 @@ const TransformPatchNotes: React.FC<TransformPatchNotesProps> = () => {
       </div>
       <div className="container">
         <div className="input-container">
-          <label>Input HTML:</label>
+          <label>Patch Notes HTML:</label>
           <textarea value={inputPatchNoteHTML} onChange={handleInputChange} />
         </div>
         <div className="output-container">
