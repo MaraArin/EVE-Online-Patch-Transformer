@@ -38,7 +38,9 @@ const TransformPatchNotes: React.FC<TransformPatchNotesProps> = () => {
 
     const mediaWikiSections = convertToMediaWiki(cleanSections);
 
-    setPatchNoteSections(mediaWikiSections);
+    const sectionsWrappedInTemplate = wrapInTemplate(mediaWikiSections);
+
+    setPatchNoteSections(sectionsWrappedInTemplate);
   };
 
   const copyToClipboard = () => {
@@ -77,6 +79,14 @@ const TransformPatchNotes: React.FC<TransformPatchNotesProps> = () => {
 };
 
 export default TransformPatchNotes;
+
+function wrapInTemplate(mediaWikiSections: string[]) {
+  return mediaWikiSections.map((section) => {
+    section = section.replace(/\* (.+?)([.!]?)\n/g, '* {{PatchNoteStatus|tbd|$1$2}}\n');
+    
+    return section;
+  });
+}
 
 function convertToMediaWiki(sectionsWithoutDefectFixes: string[]) {
   return sectionsWithoutDefectFixes.map((section) => {
@@ -133,6 +143,9 @@ function convertToMediaWiki(sectionsWithoutDefectFixes: string[]) {
 
     section = section.replace(/:\*/g, ":\n*");
     section = section.replace(/:(\w)/g, ":\n\n$1");
+
+    // Edge case formatting, newlines
+    section = section.replace(/\.(\w)/g, ".\n* $1");
 
     return section;
   });
