@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, ChangeEvent } from "react";
+import Docs from './docs';
 
 interface TransformPatchNotesProps {}
 
@@ -19,103 +20,26 @@ const TransformPatchNotes: React.FC<TransformPatchNotesProps> = () => {
   };
 
   const transformHTMLToMediaWiki = () => {
-    // Remove HTML attributes
-    let blogPostPatchNotes = inputPatchNoteHTML.replace(/(\S+)="[^"]*"/g, "");
+    let htmlPatchNotes = removeHTMLAttributes(inputPatchNoteHTML);
 
-    // Remove extra whitespaces
-    blogPostPatchNotes = blogPostPatchNotes.replace(/\s+/g, " ");
-    blogPostPatchNotes = blogPostPatchNotes.replace(/>\s+</g, "><");
-    blogPostPatchNotes = blogPostPatchNotes.replace(/\s>/g, ">");
-    blogPostPatchNotes = blogPostPatchNotes.replace(/>\s/g, ">");
-    blogPostPatchNotes = blogPostPatchNotes.replace(/\s</g, "<");
-    blogPostPatchNotes = blogPostPatchNotes.replace(/<\s/g, "<");
-    blogPostPatchNotes = blogPostPatchNotes.replace(/\s\//g, "/");
-
-    // Split the HTML by <hr> or <hr/> tag
-    let patchNoteSections = blogPostPatchNotes.split("<hr/>");
+    let patchNoteSections = htmlPatchNotes.split("<hr/>");
     if (patchNoteSections.length == 1) {
-      patchNoteSections = blogPostPatchNotes.split("<hr>");
+      patchNoteSections = htmlPatchNotes.split("<hr>");
     }
 
-    const sectionsWithoutDefectFixes = patchNoteSections.map((section) => {
-      return removeDefectFixes(section);
+    const cleanSections = patchNoteSections.map((section) => {
+      section = removeDefectFixes(section);
+
+      section = removeStyleTags(section);
+
+      return section;
     }
     );
 
-    // Process each section separately
-    const mediaWikiSections = sectionsWithoutDefectFixes.map((section) => {
-
-      // Replace HTML with MediaWiki syntax
-      section = section.replace(
-        /<p><b>Features &amp; Changes:<\/b><\/p>/g,
-        "\n=== Features & Changes ===\n\n"
-      );
-
-      section = section.replace(/<br>/g,"\n");
-
-      section = section.replace(/<h2>/g, "== ");
-      section = section.replace(/<\/h2>/g, " ==\n\n");
-
-      section = section.replace(/<h3><b>/g, "=== ");
-      section = section.replace(/<\/b><\/h3>/g, " ===\n\n");
-
-      section = section.replace(/<p><b>/g, "==== ");
-      section = section.replace(/<\/b><\/p>/g, " ====\n\n");
-
-      section = section.replace(/<li><p>/g, "* ");
-      section = section.replace(/<\/p><\/li>/g, "\n");
-
-      section = section.replace(/<\/p>/g, "\n");
-
-      // Remove ":"
-      section = section.replace(/: =/g, " =");
-      // Remove "amp;"
-      section = section.replace(/amp;/g, "");
-
-      // Remove the remaining HTML tags
-      section = section.replace(/<\/?[^>]+(>|$)/g, "");
-
-      // Add extra newline between bulletpoints and headers
-      section = section.replace(/\.\n==/g, ".\n\n==");
-      section = section.replace(/\.\n====/g, ".\n\n====");
-
-      section = section.replace(/\?\n==/g, "?\n\n==");
-      section = section.replace(/\?\n====/g, "?\n\n====");
-
-      section = section.replace(/\!\n==/g, "!\n\n==");
-      section = section.replace(/\!\n====/g, "!\n\n====");
-      
-      // Add extra newline between bulletpoints and headers
-      section = section.replace(/:\n\w/g, ":\n\n\w");
-
-      return section;
-    });
+    const mediaWikiSections = convertToMediaWiki(cleanSections);
 
     setPatchNoteSections(mediaWikiSections);
   };
-
-  function removeDefectFixes(input: string): string {
-    const startIndexH3 = input.indexOf("<h3><b>Defect Fixes:</b></h3>");
-    const startIndexP = input.indexOf("<p><b>Defect Fixes:</b></p>");
-
-    let startIndex: number;
-
-    // Determine the starting index based on which pattern is found first
-    if (
-      startIndexH3 !== -1 &&
-      (startIndexP === -1 || startIndexH3 < startIndexP)
-    ) {
-      startIndex = startIndexH3;
-    } else if (startIndexP !== -1) {
-      startIndex = startIndexP;
-    } else {
-      // Starting point not found, return the original string
-      return input;
-    }
-
-    // Found the starting point, remove everything from that point onwards
-    return input.substring(0, startIndex);
-  }
 
   const copyToClipboard = () => {
     const outputText = patchNoteSections.join("\n\n");
@@ -132,58 +56,8 @@ const TransformPatchNotes: React.FC<TransformPatchNotesProps> = () => {
   };
 
   return (
-    <div>
-      <p>
-        The EVE Online Patch Notes Transformer converts EVE Online Patch Notes
-        from rich HTML and CSS into MediaWiki Syntax.
-      </p>
-      <ol className="list-decimal">
-        <li>
-          Go to{" "}
-          <a
-            className="font-medium text-blue-600 underline dark:text-blue-500 hover:no-underline"
-            target="_blank"
-            href="https://www.eveonline.com/news/t/patch-notes"
-          >
-            EVE Online Patch Notes
-          </a>
-          .
-        </li>
-        <li>
-          Open a Patch Notes blog post such as{" "}
-          <a
-            className="font-medium text-blue-600 underline dark:text-blue-500 hover:no-underline"
-            target="_blank"
-            href="https://www.eveonline.com/news/view/havoc-expansion-notes"
-          >
-            Havoc: Expansion Notes
-          </a>
-          .
-        </li>
-        <li>
-          Right-click anywhere on the webpage to open up a dropdown menu and
-          click on <strong>Inspect</strong>. A developer console should open up. The{" "}
-          <strong>Inspector</strong> tab should be selected, showing HTML elements.
-        </li>
-        <li>
-          Find the HTML element with the <strong>class=RichText_richtext</strong>.
-          You can use the <strong>Search HTML</strong> tool to find it more easily.
-          This HTML element contains the contents of the Patch Notes blog post.
-        </li>
-        <li>
-          Right-click the HTML element to open up a dropdown menu, hover over{" "}
-          <strong>Copy</strong> than click on <strong>Inner HTML</strong>. This will
-          copy the HTML contents of the Patch Notes blog post into your
-          clipboard.
-        </li>
-        <li>
-          Paste the contents of the Patch Notes blog post into the text field
-          below.
-        </li>
-        <li>
-          Press the <strong>Convert</strong> button.
-        </li>
-      </ol>
+    <main>
+      <Docs/>
       <div className="container">
         <button onClick={transformHTMLToMediaWiki}>Convert to MediaWiki</button>
         <button onClick={copyToClipboard}>Copy to Clipboard</button>
@@ -198,8 +72,109 @@ const TransformPatchNotes: React.FC<TransformPatchNotesProps> = () => {
           <pre>{patchNoteSections.join("")}</pre>
         </div>
       </div>
-    </div>
+    </main>
   );
 };
 
 export default TransformPatchNotes;
+
+function convertToMediaWiki(sectionsWithoutDefectFixes: string[]) {
+  return sectionsWithoutDefectFixes.map((section) => {
+    // Replace HTML with MediaWiki syntax
+    // Headers
+    section = section.replace(
+      /<p><b>Features &amp; Changes:<\/b><\/p>/g,
+      "=== Features & Changes ===\n\n"
+    );
+
+    section = section.replace(/<h2>(.*?)<\/h2>/g,"== $1 ==\n\n");
+
+    section = section.replace(/<h3><b>(.*?)<\/b><\/h3>/g,"=== $1 ===\n\n");
+
+    section = section.replace(/<p><b>(.*?)<\/b><\/p>/g, '==== $1 ====\n\n');
+    
+    // Bold text
+    //section = section.replace(/<b>/g, "'''");
+    //section = section.replace(/<\/b>/g, "'''");
+
+    // Break lines
+    section = section.replace(/<br>/g, "\n");
+
+    //Bullet points
+    section = section.replace(/<li><p>(.*?)<\/p><\/li>/g, "* $1\n");
+
+    // Quotes
+    section = section.replace(/‘/g, "'");
+    section = section.replace(/’/g, "'");
+    section = section.replace(/“/g, '"');
+    section = section.replace(/”/g, '"');
+
+    // Remove ":" inside headers
+    section = section.replace(/: =/g, " =");
+    // Remove "amp;" from "&"
+    section = section.replace(/amp;/g, "");
+    // Remove "&nbsp;", the non-breaking newline
+    section = section.replace(/&nbsp;/g, "");
+
+    console.log(section)
+
+    // Edge case formatting
+    section = section.replace(/:<\/p><ul><li><p>/g, ":\n* ");
+
+    // Remove the remaining HTML tags
+    section = section.replace(/<\/?[^>]+(>|$)/g, "");
+
+    // Newlines, extra
+    section = section.replace(/([\w\.\,\!\?])=/g, "$1\n\n=");
+    section = section.replace(/([\w\.\,\!\?])\n=/g, "$1\n\n=");
+    section = section.replace(/([\w\.\,\!\?])\*/g, "$1\n\n*");
+
+    return section;
+  });
+}
+
+function removeHTMLAttributes(inputPatchNoteHTML: string) {
+  // Remove HTML tag attributes
+  let blogPostPatchNotes = inputPatchNoteHTML.replace(/(\S+)="[^"]*"/g, "");
+
+  // Remove extra whitespaces
+  blogPostPatchNotes = blogPostPatchNotes.replace(/\s+/g, " ");
+  blogPostPatchNotes = blogPostPatchNotes.replace(/>\s+</g, "><");
+  blogPostPatchNotes = blogPostPatchNotes.replace(/\s>/g, ">");
+  blogPostPatchNotes = blogPostPatchNotes.replace(/>\s/g, ">");
+  blogPostPatchNotes = blogPostPatchNotes.replace(/\s</g, "<");
+  blogPostPatchNotes = blogPostPatchNotes.replace(/<\s/g, "<");
+  blogPostPatchNotes = blogPostPatchNotes.replace(/\s\//g, "/");
+  return blogPostPatchNotes;
+}
+
+function removeDefectFixes(input: string): string {
+  // "Defect Fixes" are a type of content within the Patch Notes
+  const startIndexH3 = input.indexOf("<h3><b>Defect Fixes:</b></h3>");
+  const startIndexP = input.indexOf("<p><b>Defect Fixes:</b></p>");
+
+  let startIndex: number;
+
+  // Determine the starting index based on which pattern is found first
+  if (
+    startIndexH3 !== -1 &&
+    (startIndexP === -1 || startIndexH3 < startIndexP)
+  ) {
+    startIndex = startIndexH3;
+  } else if (startIndexP !== -1) {
+    startIndex = startIndexP;
+  } else {
+    // Starting point not found, return the original string
+    return input;
+  }
+
+  // Found the starting point, remove everything from that point onwards
+  return input.substring(0, startIndex);
+}
+
+function removeStyleTags(input: string): string {
+  input = input.replace(/<style\b[^>]*>[\s\S]*?<\/style>/g, '')
+
+  return input;
+}
+
