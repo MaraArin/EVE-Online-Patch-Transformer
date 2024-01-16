@@ -81,6 +81,7 @@ export default TransformPatchNotes;
 function convertToMediaWiki(sectionsWithoutDefectFixes: string[]) {
   return sectionsWithoutDefectFixes.map((section) => {
     // Replace HTML with MediaWiki syntax
+
     // Headers
     section = section.replace(
       /<p><b>Features &amp; Changes:<\/b><\/p>/g,
@@ -90,13 +91,10 @@ function convertToMediaWiki(sectionsWithoutDefectFixes: string[]) {
     section = section.replace(/<h2>(.*?)<\/h2>/g,"== $1 ==\n\n");
 
     section = section.replace(/<h3><b>(.*?)<\/b><\/h3>/g,"=== $1 ===\n\n");
+    section = section.replace(/<h3>(.*?)<\/h3>/g,"=== $1 ===\n\n");
 
     section = section.replace(/<p><b>(.*?)<\/b><\/p>/g, '==== $1 ====\n\n');
-    
-    //console.log(section)
 
-    //section = section.replace(/<p>(.*?):<\/p><(.*?)>/g, '==== $1: ====\n\n');
-    //<p>Universe:</p>
 
     // Bold text
     //section = section.replace(/<b>/g, "'''");
@@ -121,10 +119,9 @@ function convertToMediaWiki(sectionsWithoutDefectFixes: string[]) {
     // Remove "&nbsp;", the non-breaking newline
     section = section.replace(/&nbsp;/g, "");
 
-    //console.log(section)
-
-    // Edge case formatting
+    // Edge case formatting, newlines
     section = section.replace(/:<\/p><ul><li><p>/g, ":\n* ");
+    section = section.replace(/<\/p><p>/g, "\n\n");
 
     // Remove the remaining HTML tags
     section = section.replace(/<\/?[^>]+(>|$)/g, "");
