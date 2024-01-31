@@ -57,11 +57,17 @@ const TransformPatchNotes: React.FC<TransformPatchNotesProps> = () => {
     alert("Content copied to clipboard!");
   };
 
+  const clearInput = () => {
+    setInputPatchNoteHTML('');
+    setPatchNoteSections([]);
+  };
+
   return (
     <main>
       <Docs/>
       <div className="container">
         <button onClick={transformHTMLToMediaWiki}>Convert to MediaWiki</button>
+        <button onClick={clearInput}>Clear</button>
         <button onClick={copyToClipboard}>Copy to Clipboard</button>
       </div>
       <div className="container">
@@ -145,7 +151,7 @@ function convertToMediaWiki(sectionsWithoutDefectFixes: string[]) {
     section = section.replace(/:(\w)/g, ":\n\n$1");
 
     // Edge case formatting, newlines
-    section = section.replace(/\.(\w)/g, ".\n* $1");
+    section = section.replace(/\.([a-zA-Z])/g, ".\n* $1");
 
     return section;
   });
