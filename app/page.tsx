@@ -31,6 +31,7 @@ const TransformPatchNotes: React.FC<TransformPatchNotesProps> = () => {
       section = removeDefectFixes(section);
 
       section = removeStyleTags(section);
+      section = removeSpanTags(section);
 
       return section;
     }
@@ -128,6 +129,10 @@ function convertToMediaWiki(sectionsWithoutDefectFixes: string[]) {
     section = section.replace(/“/g, '"');
     section = section.replace(/”/g, '"');
 
+    // Links
+    section = section.replace(/<a>/g, " ");
+    section = section.replace(/<\/a>/g, " ");
+
     // Remove ":" inside headers
     section = section.replace(/: =/g, " =");
     // Remove "amp;" from "&"
@@ -202,3 +207,8 @@ function removeStyleTags(input: string): string {
   return input;
 }
 
+function removeSpanTags(input: string): string {
+  input = input.replace(/<span\b[^>]*>[\s\S]*?<\/span>/g, '')
+
+  return input;
+}
