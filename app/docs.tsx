@@ -54,7 +54,7 @@ const Docs: React.FC<DocsProps> = () => {
           below.
         </li>
         <li>
-          Press the <strong>Convert</strong> button.
+          Press the <strong>Transform</strong> button.
         </li>
       </ol>
     </>

@@ -37,7 +37,7 @@ const TransformPatchNotes: React.FC<TransformPatchNotesProps> = () => {
     }
     );
 
-    const mediaWikiSections = convertToMediaWiki(cleanSections);
+    const mediaWikiSections = transformToMediaWiki(cleanSections);
 
     const sectionsWrappedInTemplate = wrapInTemplate(mediaWikiSections);
 
@@ -67,7 +67,7 @@ const TransformPatchNotes: React.FC<TransformPatchNotesProps> = () => {
     <main>
       <Docs/>
       <div className="container">
-        <button onClick={transformHTMLToMediaWiki}>Convert to MediaWiki</button>
+        <button onClick={transformHTMLToMediaWiki}>Transform to MediaWiki</button>
         <button onClick={clearInput}>Clear</button>
         <button onClick={copyToClipboard}>Copy to Clipboard</button>
       </div>
@@ -95,7 +95,7 @@ function wrapInTemplate(mediaWikiSections: string[]) {
   });
 }
 
-function convertToMediaWiki(sectionsWithoutDefectFixes: string[]) {
+function transformToMediaWiki(sectionsWithoutDefectFixes: string[]) {
   return sectionsWithoutDefectFixes.map((section) => {
     // Replace HTML with MediaWiki syntax
 
