@@ -78,3 +78,16 @@ pre {
     transform: scale(1);
   }
 }
+
+.topBar {
+  background-color: #333;
+  color: white;
+  padding: 10px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.logo a {
+  color: white;
+  text-decoration: none;
+}

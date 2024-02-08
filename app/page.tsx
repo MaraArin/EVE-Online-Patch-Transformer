@@ -1,5 +1,6 @@
 "use client";
 
+import Link from 'next/link';
 import React, { useState, ChangeEvent } from "react";
 import Docs from './docs';
 
@@ -11,9 +12,21 @@ parse a's hrefs aka links,
 use a library? // will it work client side?
 */
 
+const TopBar = () => {
+  return (
+    <div className="topBar">
+      <div className="logo">
+        UniWiki Patch Notes Transformer <br/>
+        by <Link href="https://wiki.eveuniversity.org/User:Arin_Mara">Arin Mara</Link>
+      </div>
+    </div>
+  );
+};
+
 const TransformPatchNotes: React.FC<TransformPatchNotesProps> = () => {
   const [inputPatchNoteHTML, setInputPatchNoteHTML] = useState<string>("");
   const [patchNoteSections, setPatchNoteSections] = useState<string[]>([]);
+  const [isCopying, setIsCopying] = useState(false);
 
   const handleInputChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
     setInputPatchNoteHTML(event.target.value);
@@ -55,7 +68,13 @@ const TransformPatchNotes: React.FC<TransformPatchNotesProps> = () => {
     document.execCommand("copy");
     document.body.removeChild(tempTextarea);
 
-    alert("Content copied to clipboard!");
+    // Start pulsing animation
+    setIsCopying(true);
+
+    // Stop pulsing after 1 second
+    setTimeout(() => {
+      setIsCopying(false);
+    }, 1000);
   };
 
   const clearInput = () => {
@@ -69,7 +88,7 @@ const TransformPatchNotes: React.FC<TransformPatchNotesProps> = () => {
       <div className="container">
         <button onClick={transformHTMLToMediaWiki}>Transform to MediaWiki</button>
         <button onClick={clearInput}>Clear</button>
-        <button onClick={copyToClipboard}>Copy to Clipboard</button>
+        <button className={`"copyButton" ${isCopying ? "pulse" : ''}`}onClick={copyToClipboard}>Copy to Clipboard</button>
       </div>
       <div className="container">
         <div className="input-container">
